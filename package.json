@@ -1,8 +1,8 @@
 {
   "name": "devops-test",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "simple api for graduation date",
+  "author": "princy",
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",

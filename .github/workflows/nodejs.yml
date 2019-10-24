@@ -17,10 +17,16 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: npm lint, build, and test
-      run: |
-        npm run lint
-        npm run build --if-present
-        npm test
+    - name: Prepare
+      run: npm ci
+    - name: Lint
+      uses: mooyoul/tslint-actions@v1.1.1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        pattern: '*.ts'
+    - name: Build
+      run: npm run build --if-present
+    - name: Test
+      run: npm test
       env:
         CI: true

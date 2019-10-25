@@ -1,6 +1,9 @@
 name: Node CI + Deployment to Google Cloud Run
 
-on: [push]
+on:
+  push:
+    branches:
+      - "master"
 
 jobs:
   build:

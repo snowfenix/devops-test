@@ -14,7 +14,7 @@ import { GraduationService } from './graduation.service';
 export class GraduationController {
   constructor(private readonly graduationService: GraduationService) {}
   @Get('/:username')
-  async getGraduationMessage(@Param() params): Promise<Object> {
+  async isGraduated(@Param() params): Promise<Object> {
     const message = await this.graduationService.getGraduationMessage(
       params.username,
     );
@@ -33,7 +33,7 @@ export class GraduationController {
       params.username,
       createGraduationDate,
     );
-    if (savedGraduation) {
+    if (!!savedGraduation) {
       res.status(HttpStatus.NO_CONTENT).send();
     } else {
       res.send(HttpStatus.INTERNAL_SERVER_ERROR).send();

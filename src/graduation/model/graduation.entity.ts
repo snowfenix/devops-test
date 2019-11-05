@@ -1,10 +1,10 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Graduation {
-  @Column()
+  @PrimaryColumn()
   graduationDate: Date;
 
-  @Column('text')
+  @PrimaryColumn()
   username: string;
 }

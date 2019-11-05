@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { GraduationModule } from './graduation/graduation.module';
 import { Graduation } from './graduation/model/graduation.entity';
+import { GraduationModule } from './graduation/graduation.module';
 
 @Module({
   imports: [
@@ -15,11 +13,8 @@ import { Graduation } from './graduation/model/graduation.entity';
       password: 'password',
       database: 'devops-test',
       entities: [Graduation],
-      synchronize: true,
     }),
     GraduationModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

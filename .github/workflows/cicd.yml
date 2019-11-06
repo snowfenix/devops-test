@@ -60,4 +60,4 @@ jobs:
       - name: Install beta commands and deploy to cloud run
         uses: actions/gcloud/cli@master
         with:
-          args: "components install beta --quiet && gcloud beta run deploy ${{ secrets.GCLOUD_APP_NAME }} --quiet --image eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }} --project ${{ secrets.GCLOUD_PROJECT }} --region ${{ secrets.GCLOUD_REGION }} --platform managed"
+          args: "components install beta --quiet && gcloud beta run deploy ${{ secrets.GCLOUD_APP_NAME }} --quiet --image eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }} --update-env-vars DB_HOST=${{ secrets.DB_HOST }},DB_PORT=${{ secrets.DB_POST }},DB_USERNAME=${{ secrets.DB_USERNAME }},DB_PASSWORD=${{ secrets.DB_PASSWORD }},DB_NAME=${{ secrets.DB_NAME }} --project ${{ secrets.GCLOUD_PROJECT }} --region ${{ secrets.GCLOUD_REGION }} --platform managed"

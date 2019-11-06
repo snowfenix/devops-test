@@ -14,10 +14,17 @@ import { GraduationService } from './graduation.service';
 export class GraduationController {
   constructor(private readonly graduationService: GraduationService) {}
   @Get('/:username')
-  async isGraduated(@Param() params): Promise<Object> {
-    const message = await this.graduationService.getGraduationMessage(
+  async isGraduated(@Param() params) {
+    const isGraduated: boolean = await this.graduationService.isGraduated(
       params.username,
     );
+    let message: string;
+    if (isGraduated) {
+      message = 'Is graduated';
+    } else {
+      message = 'Is not graduated';
+    }
+
     return {
       message: message,
     };

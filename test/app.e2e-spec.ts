@@ -24,15 +24,14 @@ describe('AppController (e2e)', () => {
   });
 
   it('/graduation-date/{username} (GET)', () => {
-    const message = 'Is graduated';
     jest
-      .spyOn(service, 'getGraduationMessage')
-      .mockImplementation(() => Promise.resolve(message));
+      .spyOn(service, 'isGraduated')
+      .mockImplementation(() => Promise.resolve(true));
 
     return request(app.getHttpServer())
       .get('/graduation-date/toto')
       .expect(200)
-      .expect({ message: message });
+      .expect({ message: 'Is graduated' });
   });
 
   it('/graduation-date/{usernane} (PUT)', () => {

@@ -26,29 +26,27 @@ describe('Graduation Controller', () => {
 
   describe('isGraduated', () => {
     it(`should return a json with the message 'Is graduated'`, async () => {
-      const message = 'Is graduated';
       jest
-        .spyOn(service, 'getGraduationMessage')
-        .mockImplementation(() => Promise.resolve(message));
+        .spyOn(service, 'isGraduated')
+        .mockImplementation(() => Promise.resolve(true));
 
       const result = await controller.isGraduated({ username: 'toto' });
       expect(JSON.stringify(result)).toBe(
         JSON.stringify({
-          message: message,
+          message: 'Is graduated',
         }),
       );
     });
 
     it(`should return a json with the message 'Is not graduated'`, async () => {
-      const message = 'Is not graduated';
       jest
-        .spyOn(service, 'getGraduationMessage')
-        .mockImplementation(() => Promise.resolve(message));
+        .spyOn(service, 'isGraduated')
+        .mockImplementation(() => Promise.resolve(false));
 
       const result = await controller.isGraduated({ username: 'toto' });
       expect(JSON.stringify(result)).toBe(
         JSON.stringify({
-          message: message,
+          message: 'Is not graduated',
         }),
       );
     });

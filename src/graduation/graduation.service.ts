@@ -20,12 +20,12 @@ export class GraduationService {
     return await this.graduationRepository.save(graduation);
   }
 
-  async getGraduationMessage(username: string): Promise<string> {
+  async isGraduated(username: string): Promise<boolean> {
     const graduation = await this.findGraduationByUsername(username);
     if (!graduation || graduation.graduationDate.getTime() > Date.now()) {
-      return 'Is not graduated';
+      return false;
     } else {
-      return 'Is graduated';
+      return true;
     }
   }
 

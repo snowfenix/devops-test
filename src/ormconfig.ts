@@ -2,8 +2,7 @@ import { ConnectionOptions } from 'typeorm';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 
-// load configs from the .env file if it exists
-// the .env file must be is at the root of the project
+// Loads configs from the .env file if present at the root of the project
 // You can also make a singleton service that load and expose the .env file content.
 const envFilePath: string = `.env`;
 let dbConf: any;

@@ -1,0 +1,39 @@
+image: node:9-alpine
+
+stages:
+  - lint
+  - build
+  - test
+  - deploy
+
+lint:
+  stage: lint
+  script:
+    - npm ci
+    - npm run lint
+
+build:
+  stage: build
+  script:
+    - npm run build --if-present
+
+test:
+  stage: test
+  script:
+    - npm test
+  coverage:
+    '/Statements.*?(\d+(?:\.\d+)?)%/'
+
+deploy:
+  image: google/cloud-sdk:alpine
+  stage: deploy
+  script:
+    - gcloud components install beta --quiet
+    - gcloud components update
+    - gcloud config set run/platform managed
+    - gcloud config set run/region $GCLOUD_REGION
+    - gcloud builds submit --tag eu.gcr.io/$GCLOUD_PROJECT_ID/$GCLOUD_APP_NAME
+    - gcloud beta run deploy $GCLOUD_APP_NAME --quiet --image eu.gcr.io/$GCLOUD_PROJECT/$GCLOUD_APP_NAME --allow-unauthenticated --update-env-vars DB_HOST=$DB_HOST,DB_PORT=$DB_POST,DB_USERNAME=$DB_USERNAME,DB_PASSWORD=$DB_PASSWORD,DB_NAME=$DB_NAME --project $GCLOUD_PROJECT
+
+  only:
+  - master

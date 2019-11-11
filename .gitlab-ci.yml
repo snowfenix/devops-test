@@ -15,7 +15,13 @@ lint:
 build:
   stage: build
   script:
+    - npm install rimraf
     - npm run build --if-present
+  cache:
+    policy: push
+    paths:
+      - node_modules/
+
 
 test:
   stage: test

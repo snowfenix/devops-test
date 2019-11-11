@@ -1,3 +1,6 @@
+include:
+  - template: Code-Quality.gitlab-ci.yml
+
 image: node:10-alpine
 
 stages:

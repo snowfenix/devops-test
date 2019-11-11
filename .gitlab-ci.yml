@@ -26,6 +26,7 @@ build:
 test:
   stage: test
   script:
+    - npm install jest
     - npm test
   coverage:
     '/Statements.*?(\d+(?:\.\d+)?)%/'

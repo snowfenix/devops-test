@@ -6,6 +6,7 @@ import * as fs from 'fs';
 // You can also make a singleton service that load and expose the .env file content.
 const envFilePath: string = `.env`;
 let dbConf: any;
+/* tslint:disable:no-string-literal */
 if (fs.existsSync(envFilePath)) {
   const env = dotenv.parse(fs.readFileSync(envFilePath));
   dbConf = {
@@ -52,5 +53,5 @@ const config: ConnectionOptions = {
     migrationsDir: 'src/migrations',
   },
 };
-
+/* tslint:enable:no-string-literal */
 export = config;

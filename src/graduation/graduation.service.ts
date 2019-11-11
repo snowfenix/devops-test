@@ -32,9 +32,11 @@ export class GraduationService {
   private async findGraduationByUsername(
     username: string,
   ): Promise<Graduation> {
+    /* tslint:disable:object-literal-shorthand */
     const graduation = await this.graduationRepository.findOne({
       where: { username: username },
     });
+    /* tslint:enable:object-literal-shorthand */
     return graduation;
   }
 }

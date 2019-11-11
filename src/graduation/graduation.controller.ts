@@ -18,15 +18,15 @@ export class GraduationController {
     const isGraduated: boolean = await this.graduationService.isGraduated(
       params.username,
     );
-    let message: string;
+    let result: string;
     if (isGraduated) {
-      message = 'Is graduated';
+      result = 'Is graduated';
     } else {
-      message = 'Is not graduated';
+      result = 'Is not graduated';
     }
 
     return {
-      message: message,
+      message: result,
     };
   }
 

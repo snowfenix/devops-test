@@ -45,7 +45,7 @@ build_docker:
   script:
     - docker login -u $DOCKER_USER -p $DOCKER_PWD 
     - docker build . --file Dockerfile --tag $DOCKER_USER/devops-test:$CI_COMMIT_SHA
-    - docker push $DOCKER_PWD/devops-test:$CI_COMMIT_SHA
+    - docker push $DOCKER_USER/devops-test:$CI_COMMIT_SHA
     - docker tag devops-test:$CI_COMMIT_REF_NAME
     - docker push $DOCKER_USER/devops-test:$CI_COMMIT_REF_NAME
 

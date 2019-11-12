@@ -36,6 +36,7 @@ stages:
 #     '/Statements.*?(\d+(?:\.\d+)?)%/'
 
 build_docker:
+  stage: build_docker
   before_script:
     - docker info
   script:

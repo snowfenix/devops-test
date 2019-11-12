@@ -3,6 +3,9 @@
 
 image: node:10-alpine
 
+services:
+  - docker:dind
+
 stages:
   # - lint
   # - build
@@ -37,7 +40,6 @@ stages:
 
 build_docker:
   stage: build_docker
-  image: docker:latest
   before_script:
     - docker info
   script:

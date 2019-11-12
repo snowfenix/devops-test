@@ -44,8 +44,9 @@ build_docker:
     - docker info
   script:
     - docker login -u $DOCKER_USER -p $DOCKER_PWD 
-    - docker build . --file Dockerfile --tag $DOCKER_USER/devops-test:$CI_COMMIT_SHA $DOCKER_USER/devops-test
+    - docker build . --file Dockerfile --tag $DOCKER_USER/devops-test:$CI_COMMIT_SHA
     - docker push $DOCKER_USER/devops-test:$CI_COMMIT_SHA
+    - docker tag $DOCKER_USER/devops-test:$CI_COMMIT_SHA $DOCKER_USER/devops-test
     - docker push $DOCKER_USER/devops-test
     - docker tag $DOCKER_USER/devops-test $DOCKER_USER/devops-test:$CI_COMMIT_REF_NAME
     - docker push $DOCKER_USER/devops-test:$CI_COMMIT_REF_NAME

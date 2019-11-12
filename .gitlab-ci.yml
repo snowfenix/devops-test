@@ -60,7 +60,7 @@ deploy:
     - gcloud config set run/platform managed
     - gcloud config set run/region $GCLOUD_REGION
     - gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file=$GCLOUD_AUTH
-    - gcloud beta run deploy $GCLOUD_APP_NAME --quiet --image registry.hub.docker.com/$DOCKER_USER/devops-test --allow-unauthenticated --update-env-vars DB_HOST=$DB_HOST,DB_PORT=$DB_POST,DB_USERNAME=$DB_USERNAME,DB_PASSWORD=$DB_PASSWORD,DB_NAME=$DB_NAME --project $GCLOUD_PROJECT
+    - gcloud beta run deploy $GCLOUD_APP_NAME --quiet --image docker.io/$DOCKER_USER/devops-test --allow-unauthenticated --update-env-vars DB_HOST=$DB_HOST,DB_PORT=$DB_POST,DB_USERNAME=$DB_USERNAME,DB_PASSWORD=$DB_PASSWORD,DB_NAME=$DB_NAME --project $GCLOUD_PROJECT
   environment:
     name: production
   only:

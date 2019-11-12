@@ -37,21 +37,25 @@ stages:
 
 build_docker:
   stage: build_docker
-  image: google/cloud-sdk:alpine
+  image: docker:stable
+  services:
+    - docker:dind
+  before_script:
+    - docker info
+    - apt-get update && apt-get install google-cloud-sdk
   script:
-    - gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file=$GCLOUD_AUTH
-    - gcloud docker build . --file Dockerfile --tag $REGISTRY/devops-test:$CI_COMMIT_SHA
-    - gcloud docker push $REGISTRY/devops-test:$CI_COMMIT_SHA
-    - gcloud docker tag $REGISTRY/devops-test:$CI_COMMIT_SHA $REGISTRY/devops-test
-    - gcloud docker push $REGISTRY/devops-test
-    - gcloud docker tag $REGISTRY/devops-test $REGISTRY/devops-test:$CI_COMMIT_REF_NAME
-    - gcloud docker push $REGISTRY/devops-test:$CI_COMMIT_REF_NAME
+    - gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file=$GCLOUD_CONTAINER_REGISTRY_AUTH
+    - gcloud auth configure-docker --quiet
+    - docker build . --file Dockerfile --tag $REGISTRY/devops-test:$CI_COMMIT_SHA
+    - docker push $REGISTRY/devops-test:$CI_COMMIT_SHA
+    - docker tag $REGISTRY/devops-test:$CI_COMMIT_SHA $REGISTRY/devops-test
+    - docker push $REGISTRY/devops-test
+    - docker tag $REGISTRY/devops-test $REGISTRY/devops-test:$CI_COMMIT_REF_NAME
+    - docker push $REGISTRY/devops-test:$CI_COMMIT_REF_NAME
 
 deploy:
   image: google/cloud-sdk:alpine
   stage: deploy
-  services:
-    - docker:dind
   script:
     - gcloud components install beta --quiet
     - gcloud components update

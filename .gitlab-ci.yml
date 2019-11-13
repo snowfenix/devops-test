@@ -7,7 +7,7 @@ stages:
   - lint
   - build
   - test
-  - build_docker
+  - docker_build_push
   - deploy
 
 lint:
@@ -34,8 +34,8 @@ test:
   coverage:
     '/Statements.*?(\d+(?:\.\d+)?)%/'
 
-build_docker:
-  stage: build_docker
+docker_build_push:
+  stage: docker_build_push
   image: youdowell/gcloud-dind
   services:
     - docker:dind

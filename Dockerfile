@@ -14,5 +14,5 @@ FROM gcr.io/distroless/nodejs
 WORKDIR /app
 COPY --from=node_modules /tmp/node_modules ./node_modules
 COPY --from=dist /tmp/dist ./dist
-EXPOSE 3000
+EXPOSE 8080
 CMD ["dist/main.js"]

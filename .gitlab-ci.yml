@@ -4,35 +4,35 @@
 image: node:10-alpine
 
 stages:
-  - lint
-  - build
-  - test
+  # - lint
+  # - build
+  # - test
   - docker_build_push
   - deploy
 
-lint:
-  stage: lint
-  script:
-    - npm ci
-    - npm run lint
+# lint:
+#   stage: lint
+#   script:
+#     - npm ci
+#     - npm run lint
 
-build:
-  stage: build
-  script:
-    - npm install rimraf
-    - npm run build --if-present
-  cache:
-    policy: push
-    paths:
-      - node_modules/
+# build:
+#   stage: build
+#   script:
+#     - npm install rimraf
+#     - npm run build --if-present
+#   cache:
+#     policy: push
+#     paths:
+#       - node_modules/
 
-test:
-  stage: test
-  script:
-    - npm install jest
-    - npm test
-  coverage:
-    '/Statements.*?(\d+(?:\.\d+)?)%/'
+# test:
+#   stage: test
+#   script:
+#     - npm install jest
+#     - npm test
+#   coverage:
+#     '/Statements.*?(\d+(?:\.\d+)?)%/'
 
 docker_build_push:
   stage: docker_build_push

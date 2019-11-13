@@ -7,7 +7,7 @@ stages:
   # - lint
   # - build
   # - test
-  # - build_docker
+  - build_docker
   - deploy
 
 # lint:
@@ -34,29 +34,11 @@ stages:
 #   coverage:
 #     '/Statements.*?(\d+(?:\.\d+)?)%/'
 
-# build_docker:
-#   stage: build_docker
-#   image: docker:stable
-#   services:
-#     - docker:dind
-#   before_script:
-#     - docker info
-#   script:
-#     - docker login -u $DOCKER_USER -p $DOCKER_PWD 
-#     - docker build . --file Dockerfile --tag $DOCKER_USER/devops-test:$CI_COMMIT_SHA
-#     - docker push $DOCKER_USER/devops-test:$CI_COMMIT_SHA
-#     - docker tag $DOCKER_USER/devops-test:$CI_COMMIT_SHA $DOCKER_USER/devops-test
-#     - docker push $DOCKER_USER/devops-test
-#     - docker tag $DOCKER_USER/devops-test $DOCKER_USER/devops-test:$CI_COMMIT_REF_NAME
-#     - docker push $DOCKER_USER/devops-test:$CI_COMMIT_REF_NAME
-
-
-
-deploy:
+build_docker:
+  stage: build_docker
   image: youdowell/gcloud-dind
   services:
     - docker:dind
-  stage: deploy
   before_script:
     - docker info
   script:
@@ -70,6 +52,25 @@ deploy:
     - docker push $REGISTRY/devops-test
     - docker tag $REGISTRY/devops-test $REGISTRY/devops-test:$CI_COMMIT_REF_NAME
     - docker push $REGISTRY/devops-test:$CI_COMMIT_REF_NAME
+
+deploy:
+  image: youdowell/gcloud-dind
+  services:
+    - docker:dind
+  stage: deploy
+  before_script:
+    - docker info
+  script:
+    - gcloud components install beta --quiet
+    - gcloud components update
+    - gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file=$GCLOUD_AUTH
+    # - gcloud auth configure-docker --quiet
+    # - docker build . --file Dockerfile --tag $REGISTRY/devops-test:$CI_COMMIT_SHA
+    # - docker push $REGISTRY/devops-test:$CI_COMMIT_SHA
+    # - docker tag $REGISTRY/devops-test:$CI_COMMIT_SHA $REGISTRY/devops-test
+    # - docker push $REGISTRY/devops-test
+    # - docker tag $REGISTRY/devops-test $REGISTRY/devops-test:$CI_COMMIT_REF_NAME
+    # - docker push $REGISTRY/devops-test:$CI_COMMIT_REF_NAME
     - gcloud config set run/platform managed
     - gcloud config set run/region $GCLOUD_REGION
     - gcloud beta run deploy $GCLOUD_APP_NAME --quiet --image $REGISTRY/devops-test --allow-unauthenticated --update-env-vars DB_HOST=$DB_HOST,DB_PORT=$DB_POST,DB_USERNAME=$DB_USERNAME,DB_PASSWORD=$DB_PASSWORD,DB_NAME=$DB_NAME --project $GCLOUD_PROJECT
@@ -77,21 +78,3 @@ deploy:
     name: production
   only:
   - master
-
-
-# deploy:
-#   image: google/cloud-sdk:latest
-#   stage: deploy
-#   script:
-#     - gcloud components install beta --quiet
-#     - gcloud components update
-#     - gcloud config set run/platform managed
-#     - gcloud config set run/region $GCLOUD_REGION
-#     - gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file=$GCLOUD_AUTH
-#     - gcloud builds submit --tag $REGISTRY/devops-test
-#     - gcloud beta run deploy $GCLOUD_APP_NAME --quiet --image $REGISTRY/devops-test --allow-unauthenticated --update-env-vars DB_HOST=$DB_HOST,DB_PORT=$DB_POST,DB_USERNAME=$DB_USERNAME,DB_PASSWORD=$DB_PASSWORD,DB_NAME=$DB_NAME --project $GCLOUD_PROJECT
-#   environment:
-#     name: production
-#   when: manual
-#   only:
-#   - master

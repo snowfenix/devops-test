@@ -7,7 +7,7 @@ stages:
   # - lint
   # - build
   # - test
-  - build_docker
+  # - build_docker
   - deploy
 
 # lint:
@@ -26,7 +26,6 @@ stages:
 #     paths:
 #       - node_modules/
 
-
 # test:
 #   stage: test
 #   script:
@@ -35,15 +34,15 @@ stages:
 #   coverage:
 #     '/Statements.*?(\d+(?:\.\d+)?)%/'
 
-build_docker:
-  stage: build_docker
-  services:
-    - docker:dind
+deploy:
+  image: rcaught/docker-with-cloud-sdk
+  stage: deploy
   before_script:
     - docker info
-    - apt-get update && apt-get install google-cloud-sdk
   script:
-    - gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file=$GCLOUD_CONTAINER_REGISTRY_AUTH
+    - gcloud components install beta --quiet
+    - gcloud components update
+    - gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file=$GCLOUD_AUTH
     - gcloud auth configure-docker --quiet
     - docker build . --file Dockerfile --tag $REGISTRY/devops-test:$CI_COMMIT_SHA
     - docker push $REGISTRY/devops-test:$CI_COMMIT_SHA
@@ -51,18 +50,28 @@ build_docker:
     - docker push $REGISTRY/devops-test
     - docker tag $REGISTRY/devops-test $REGISTRY/devops-test:$CI_COMMIT_REF_NAME
     - docker push $REGISTRY/devops-test:$CI_COMMIT_REF_NAME
-
-deploy:
-  image: google/cloud-sdk:alpine
-  stage: deploy
-  script:
-    - gcloud components install beta --quiet
-    - gcloud components update
     - gcloud config set run/platform managed
     - gcloud config set run/region $GCLOUD_REGION
-    - gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file=$GCLOUD_AUTH
     - gcloud beta run deploy $GCLOUD_APP_NAME --quiet --image $REGISTRY/devops-test --allow-unauthenticated --update-env-vars DB_HOST=$DB_HOST,DB_PORT=$DB_POST,DB_USERNAME=$DB_USERNAME,DB_PASSWORD=$DB_PASSWORD,DB_NAME=$DB_NAME --project $GCLOUD_PROJECT
   environment:
     name: production
   only:
   - master
+
+
+# deploy:
+#   image: google/cloud-sdk:latest
+#   stage: deploy
+#   script:
+#     - gcloud components install beta --quiet
+#     - gcloud components update
+#     - gcloud config set run/platform managed
+#     - gcloud config set run/region $GCLOUD_REGION
+#     - gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file=$GCLOUD_AUTH
+#     - gcloud builds submit --tag $REGISTRY/devops-test
+#     - gcloud beta run deploy $GCLOUD_APP_NAME --quiet --image $REGISTRY/devops-test --allow-unauthenticated --update-env-vars DB_HOST=$DB_HOST,DB_PORT=$DB_POST,DB_USERNAME=$DB_USERNAME,DB_PASSWORD=$DB_PASSWORD,DB_NAME=$DB_NAME --project $GCLOUD_PROJECT
+#   environment:
+#     name: production
+#   when: manual
+#   only:
+#   - master

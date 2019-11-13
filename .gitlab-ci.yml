@@ -36,7 +36,7 @@ stages:
 
 build_docker:
   stage: build_docker
-  image: google/cloud-sdk:slim
+  image: youdowell/gcloud-dind
   services:
     - docker:dind
   before_script:

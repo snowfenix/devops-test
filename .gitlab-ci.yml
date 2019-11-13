@@ -36,13 +36,13 @@ stages:
 
 build_docker:
   stage: build_docker
-  image: youdowell/gcloud-dind
+  image: google/cloud-sdk:slim
   services:
     - docker:dind
   before_script:
     - docker info
   script:
-    - gcloud components install beta --quiet
+    # - gcloud components install beta --quiet
     - gcloud components update
     - gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file=$GCLOUD_AUTH
     - gcloud auth configure-docker --quiet
@@ -54,12 +54,12 @@ build_docker:
     - docker push $REGISTRY/devops-test:$CI_COMMIT_REF_NAME
 
 deploy:
-  image: youdowell/gcloud-dind
-  services:
-    - docker:dind
+  image: google/cloud-sdk:slim
+  # services:
+  #   - docker:dind
   stage: deploy
-  before_script:
-    - docker info
+  # before_script:
+  #   - docker info
   script:
     - gcloud components install beta --quiet
     - gcloud components update

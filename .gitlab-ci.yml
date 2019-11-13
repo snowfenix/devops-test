@@ -41,10 +41,10 @@ docker_build_push:
     - docker:dind
   before_script:
     - docker info
-  script:
     - gcloud components update
     - gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file=$GCLOUD_AUTH
     - gcloud auth configure-docker --quiet
+  script:
     - docker build . --file Dockerfile --tag $REGISTRY/devops-test:$CI_COMMIT_SHA
     - docker push $REGISTRY/devops-test:$CI_COMMIT_SHA
     - docker tag $REGISTRY/devops-test:$CI_COMMIT_SHA $REGISTRY/devops-test

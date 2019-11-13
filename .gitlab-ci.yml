@@ -53,9 +53,9 @@ stages:
 
 
 deploy:
-  image: rcaught/docker-with-cloud-sdk
-  services:
-    - docker:dind
+  image: youdowell/gcloud-dind
+  # services:
+  #   - docker:dind
   stage: deploy
   before_script:
     - docker info

@@ -7,10 +7,7 @@ export class Init1573073754378 implements MigrationInterface {
         username varchar NOT NULL,
         "graduationDate" date NOT NULL,
         CONSTRAINT graduation_pk PRIMARY KEY (username, "graduationDate")
-        );
-        
-        ALTER TABLE public.graduation OWNER TO username;
-        GRANT ALL ON TABLE public.graduation TO username;`,
+        );`,
     );
   }
 

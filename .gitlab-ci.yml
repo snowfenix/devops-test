@@ -54,8 +54,8 @@ stages:
 
 deploy:
   image: youdowell/gcloud-dind
-  # services:
-  #   - docker:dind
+  services:
+    - docker:dind
   stage: deploy
   before_script:
     - docker info

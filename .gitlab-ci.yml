@@ -1,38 +1,38 @@
-# include:
-#   - template: Code-Quality.gitlab-ci.yml
+include:
+  - template: Code-Quality.gitlab-ci.yml
 
 image: node:10-alpine
 
 stages:
-  # - lint
-  # - build
-  # - test
+  - lint
+  - build
+  - test
   - build_docker
   - deploy
 
-# lint:
-#   stage: lint
-#   script:
-#     - npm ci
-#     - npm run lint
+lint:
+  stage: lint
+  script:
+    - npm ci
+    - npm run lint
 
-# build:
-#   stage: build
-#   script:
-#     - npm install rimraf
-#     - npm run build --if-present
-#   cache:
-#     policy: push
-#     paths:
-#       - node_modules/
+build:
+  stage: build
+  script:
+    - npm install rimraf
+    - npm run build --if-present
+  cache:
+    policy: push
+    paths:
+      - node_modules/
 
-# test:
-#   stage: test
-#   script:
-#     - npm install jest
-#     - npm test
-#   coverage:
-#     '/Statements.*?(\d+(?:\.\d+)?)%/'
+test:
+  stage: test
+  script:
+    - npm install jest
+    - npm test
+  coverage:
+    '/Statements.*?(\d+(?:\.\d+)?)%/'
 
 build_docker:
   stage: build_docker
@@ -42,7 +42,6 @@ build_docker:
   before_script:
     - docker info
   script:
-    # - gcloud components install beta --quiet
     - gcloud components update
     - gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file=$GCLOUD_AUTH
     - gcloud auth configure-docker --quiet
@@ -55,22 +54,11 @@ build_docker:
 
 deploy:
   image: google/cloud-sdk:slim
-  # services:
-  #   - docker:dind
   stage: deploy
-  # before_script:
-  #   - docker info
   script:
     - gcloud components install beta --quiet
     - gcloud components update
     - gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file=$GCLOUD_AUTH
-    # - gcloud auth configure-docker --quiet
-    # - docker build . --file Dockerfile --tag $REGISTRY/devops-test:$CI_COMMIT_SHA
-    # - docker push $REGISTRY/devops-test:$CI_COMMIT_SHA
-    # - docker tag $REGISTRY/devops-test:$CI_COMMIT_SHA $REGISTRY/devops-test
-    # - docker push $REGISTRY/devops-test
-    # - docker tag $REGISTRY/devops-test $REGISTRY/devops-test:$CI_COMMIT_REF_NAME
-    # - docker push $REGISTRY/devops-test:$CI_COMMIT_REF_NAME
     - gcloud config set run/platform managed
     - gcloud config set run/region $GCLOUD_REGION
     - gcloud beta run deploy $GCLOUD_APP_NAME --quiet --image $REGISTRY/devops-test --allow-unauthenticated --update-env-vars DB_HOST=$DB_HOST,DB_PORT=$DB_POST,DB_USERNAME=$DB_USERNAME,DB_PASSWORD=$DB_PASSWORD,DB_NAME=$DB_NAME --project $GCLOUD_PROJECT

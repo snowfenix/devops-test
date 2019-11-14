@@ -6,7 +6,7 @@ async function bootstrap() {
   const port = process.env.PORT || 8080;
   await app.listen(port, () => {
     // tslint:disable-next-line:no-console
-    console.log('Hello world listening on port', port);
+    console.log('Listening on port', port);
   });
 }
 bootstrap();

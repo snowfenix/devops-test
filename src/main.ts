@@ -5,6 +5,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const port = process.env.PORT || 8080;
   await app.listen(port, () => {
+    // tslint:disable-next-line:no-console
     console.log('Hello world listening on port', port);
   });
 }

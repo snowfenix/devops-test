@@ -31,7 +31,6 @@ test:
   script:
     - npm install jest
     - npm run test:cov
-    - npm run test:e2e
   coverage:
     '/Statements.*?(\d+(?:\.\d+)?)%/'
 

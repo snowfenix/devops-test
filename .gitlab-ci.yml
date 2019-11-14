@@ -30,7 +30,8 @@ test:
   stage: test
   script:
     - npm install jest
-    - npm test
+    - npm run test:cov
+    - npm run test:e2e
   coverage:
     '/Statements.*?(\d+(?:\.\d+)?)%/'
 
@@ -56,12 +57,11 @@ deploy:
   image: google/cloud-sdk:alpine
   stage: deploy
   script:
-    - gcloud components install beta --quiet
     - gcloud components update
     - gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file=$GCLOUD_AUTH
     - gcloud config set run/platform managed
     - gcloud config set run/region $GCLOUD_REGION
-    - gcloud beta run deploy $GCLOUD_APP_NAME --quiet --image $REGISTRY/devops-test --allow-unauthenticated --update-env-vars DB_HOST=$DB_HOST,DB_PORT=$DB_PORT,DB_USERNAME=$DB_USERNAME,DB_PASSWORD=$DB_PASSWORD,DB_NAME=$DB_NAME --project $GCLOUD_PROJECT
+    - gcloud run deploy $GCLOUD_APP_NAME --quiet --image $REGISTRY/devops-test --allow-unauthenticated --update-env-vars DB_HOST=$DB_HOST,DB_PORT=$DB_PORT,DB_USERNAME=$DB_USERNAME,DB_PASSWORD=$DB_PASSWORD,DB_NAME=$DB_NAME --project $GCLOUD_PROJECT
   environment:
     name: production
   only:

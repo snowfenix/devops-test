@@ -17,7 +17,7 @@ I chose to deploy this into [Google Cloud Run](https://cloud.google.com/run/).
 Here's why:
 
 - Like serverless but more flexible
-- Deployment is super easy (see line 64 of .gitlab-ci.yml)
+- Deployment is super easy (see line 63 of .gitlab-ci.yml)
 - Environment variables are injected into the container (useful for configuring a database connection etc.)
 - Scales down to zero!
 - I can move to another cloud service easily because it's just a docker container

@@ -43,7 +43,7 @@ docker_build_push:
   before_script:
     - docker info
     - gcloud components update
-    - gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file=$GCLOUD_AUTH
+    - gcloud auth activate-service-account $GCLOUD_CONTAINER_REGISTRY_SA --key-file=$GCLOUD_CONTAINER_REGISTRY_SA_AUTH
     - gcloud auth configure-docker --quiet
   script:
     - docker build . --file Dockerfile --tag $REGISTRY/devops-test:$CI_COMMIT_SHA

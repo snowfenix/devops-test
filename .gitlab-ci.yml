@@ -55,7 +55,7 @@ docker_build_push:
 
 deploy_staging:
   image: google/cloud-sdk:alpine
-  stage: deploy
+  stage: deploy_staging
   script:
     - gcloud components update
     - gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file=$GCLOUD_AUTH
@@ -69,7 +69,7 @@ deploy_staging:
 
 deploy_prod:
   image: google/cloud-sdk:alpine
-  stage: deploy
+  stage: deploy_prod
   script:
     - gcloud components update
     - gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file=$GCLOUD_AUTH

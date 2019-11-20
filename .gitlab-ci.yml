@@ -8,7 +8,8 @@ stages:
   - build
   - test
   - docker_build_push
-  - deploy
+  - deploy_staging
+  - deploy_prod
 
 lint:
   stage: lint
@@ -52,7 +53,7 @@ docker_build_push:
     - docker tag $REGISTRY/devops-test $REGISTRY/devops-test:$CI_COMMIT_REF_NAME
     - docker push $REGISTRY/devops-test:$CI_COMMIT_REF_NAME
 
-deploy:
+deploy_staging:
   image: google/cloud-sdk:alpine
   stage: deploy
   script:
@@ -62,6 +63,22 @@ deploy:
     - gcloud config set run/region $GCLOUD_REGION
     - gcloud run deploy $GCLOUD_APP_NAME --quiet --image $REGISTRY/devops-test --allow-unauthenticated --update-env-vars DB_HOST=$DB_HOST,DB_PORT=$DB_PORT,DB_USERNAME=$DB_USERNAME,DB_PASSWORD=$DB_PASSWORD,DB_NAME=$DB_NAME --project $GCLOUD_PROJECT
   environment:
+    name: staging
+  only:
+  - master
+
+deploy_prod:
+  image: google/cloud-sdk:alpine
+  stage: deploy
+  script:
+    - gcloud components update
+    - gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file=$GCLOUD_AUTH
+    - gcloud config set run/platform managed
+    - gcloud config set run/region $GCLOUD_REGION
+    - gcloud run deploy $GCLOUD_APP_NAME --quiet --image $REGISTRY/devops-test:$CI_COMMIT_REF_NAME --allow-unauthenticated --update-env-vars DB_HOST=$DB_HOST,DB_PORT=$DB_PORT,DB_USERNAME=$DB_USERNAME,DB_PASSWORD=$DB_PASSWORD,DB_NAME=$DB_NAME --project $GCLOUD_PROJECT
+  when: manual
+  environment:
     name: production
   only:
   - master
+  - tags

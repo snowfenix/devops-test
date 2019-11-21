@@ -2,7 +2,7 @@
 
 This is a proposed solution to [this devops test](https://github.com/tmdzk/simple-test).
 
-It's live here: https://devops-test-q7n537vqcq-ew.a.run.app/
+It is live here : https://devops-test-cpbd2rit6q-ew.a.run.app
 
 #### 1. Code and design a simple api following those endpoints, storage/database can be either a fs or db:
 

@@ -65,6 +65,7 @@ deploy_staging:
     name: staging
   only:
     - master
+    - tags
 
 deploy_prod:
   image: google/cloud-sdk:alpine

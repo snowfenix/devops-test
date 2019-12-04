@@ -33,7 +33,6 @@ $ npm run test:cov
 ## Stay in touch
 
 - Author - [Princy Razafimanantsoa](https://www.princy.dev/)
-- Twitter - [@princyraza](https://twitter.com/princyraza)
 
 ## License
 
